@@ -1,12 +1,48 @@
-import { createTheme } from '@mui/material';
+import { type LinkProps, createTheme } from '@mui/material';
 
 import { FontFamilies } from './FontFamilies';
 import { FontWeights } from './FontWeights';
+import LinkBehavior from './LinkBehavior';
 
 const theme = createTheme({
   palette: {
     primary: {
       main: '#729E65',
+    },
+    text: {
+      primary: '#223644',
+      secondary: '#64727C',
+    },
+  },
+  components: {
+    MuiInputBase: {
+      defaultProps: {
+        style: {
+          fontFamily: FontFamilies.poppins,
+          fontWeight: FontWeights.regular,
+          fontSize: '1rem',
+          lineHeight: '1.5rem',
+        },
+      },
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          fontSize: '0.875rem',
+          lineHeight: '1.313rem',
+          fontFamily: FontFamilies.roboto,
+        },
+      },
+    },
+    MuiLink: {
+      defaultProps: {
+        component: LinkBehavior,
+      } as LinkProps,
+    },
+    MuiButtonBase: {
+      defaultProps: {
+        LinkComponent: LinkBehavior,
+      },
     },
   },
 });
@@ -21,7 +57,6 @@ theme.typography.h1 = {
     lineHeight: '2.25rem',
   },
 };
-
 theme.typography.h2 = {
   fontFamily: FontFamilies.poppins,
   fontWeight: FontWeights.medium,
@@ -32,7 +67,6 @@ theme.typography.h2 = {
     lineHeight: '2.063rem',
   },
 };
-
 theme.typography.h4 = {
   fontFamily: FontFamilies.poppins,
   fontWeight: FontWeights.medium,
@@ -43,14 +77,12 @@ theme.typography.h4 = {
     lineHeight: '1.875rem',
   },
 };
-
 theme.typography.h5 = {
   fontFamily: FontFamilies.poppins,
   fontWeight: FontWeights.medium,
   fontSize: '1.375rem',
   lineHeight: '2.063rem',
 };
-
 theme.typography.h6 = {
   fontFamily: FontFamilies.poppins,
   fontWeight: FontWeights.medium,
@@ -61,7 +93,6 @@ theme.typography.h6 = {
     lineHeight: '1.688rem',
   },
 };
-
 theme.typography.body1 = {
   fontFamily: FontFamilies.poppins,
   fontWeight: FontWeights.regular,
@@ -72,7 +103,6 @@ theme.typography.body1 = {
     lineHeight: '1.5rem',
   },
 };
-
 theme.typography.body2 = {
   fontFamily: FontFamilies.poppins,
   fontWeight: FontWeights.medium,
@@ -83,26 +113,22 @@ theme.typography.body2 = {
     lineHeight: '1.5rem',
   },
 };
-
 theme.typography.subtitle1 = {
   fontFamily: FontFamilies.poppins,
   fontWeight: FontWeights.regular,
   fontSize: '1rem',
   lineHeight: '1.5rem',
 };
-
 theme.typography.subtitle2 = {
   fontFamily: FontFamilies.poppins,
   fontWeight: FontWeights.medium,
   fontSize: '1rem',
   lineHeight: '1.5rem',
 };
-
 theme.typography.caption = {
   fontFamily: FontFamilies.poppins,
   fontWeight: FontWeights.regular,
   fontSize: '0.875rem',
   lineHeight: '1.313rem',
 };
-
 export default theme;
