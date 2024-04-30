@@ -69,7 +69,7 @@ export default function AccountSidebar({ isMinimized, onClose }: Props) {
           <Avatar sx={{ height: 48, width: 48, background: Colors.disabled }}>
             {userInitial}
           </Avatar>
-          {!isMinimized && <Typography variant="body1">Andrew</Typography>}
+          {!isMinimized && <Typography variant="body1">Username</Typography>}
         </Stack>
         <List>
           {ACCOUNT_LINKS.map(({ Icon, text, path }) => (

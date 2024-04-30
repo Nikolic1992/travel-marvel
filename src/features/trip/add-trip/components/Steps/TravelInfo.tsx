@@ -114,8 +114,8 @@ export default function TravelInfo() {
                 inputRef={ref}
                 variant="standard"
                 margin="normal"
-                required
                 fullWidth
+                required
                 id="name"
                 label="Trip Name"
                 autoFocus
@@ -151,7 +151,6 @@ export default function TravelInfo() {
             inputRef={ref}
             variant="standard"
             margin="normal"
-            required
             fullWidth
             id="description"
             label="Description"
