@@ -10,6 +10,7 @@ import { storage } from '../firebase';
 
 interface Props {
   onAllUploadSuccess: (uploadedFiles: TripFile[]) => void;
+  onOneUploadSuccess: (index: number, uploadedFile: TripFile) => void;
 }
 
 interface State {
@@ -21,7 +22,6 @@ interface State {
   uploadedFilesCount: number;
   removingFilePath: null | string;
 }
-
 const defaultState: State = {
   isLoading: false,
   uploadProgresses: [],
@@ -32,12 +32,10 @@ const defaultState: State = {
   removingFilePath: null,
 };
 
-export function useStorage({ onAllUploadSuccess }: Props) {
+export function useStorage({ onAllUploadSuccess, onOneUploadSuccess }: Props) {
   const user = useAppSelector(selectUser);
-
   const { showErrorMessage } = useToast();
   const [state, setState] = useState<State>(defaultState);
-
   useEffect(() => {
     if (state.totalFiles > 0 && state.uploadedFilesCount === state.totalFiles) {
       setState((prev) => ({ ...prev, isLoading: false }));
@@ -49,7 +47,6 @@ export function useStorage({ onAllUploadSuccess }: Props) {
     ) {
       setState((prev) => ({ ...prev, isLoading: false }));
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     state.totalFiles,
@@ -57,22 +54,18 @@ export function useStorage({ onAllUploadSuccess }: Props) {
     state.uploadedFiles,
     state.uploadedFilesCount,
   ]);
-
   const uploadFiles = (path: string, files: (DocumentToUpload | null)[]) => {
     setState(defaultState);
-
     files.forEach((file, index) => {
       setState((prev) => ({
         ...prev,
         totalFiles: files.length,
         isLoading: true,
       }));
-
       if (file?.storagePath) {
         setState((prevState) => {
           const newUploadedFiles = [...prevState.uploadedFiles];
           newUploadedFiles[index] = file;
-
           return {
             ...prevState,
             uploadedFilesCount: ++prevState.uploadedFilesCount,
@@ -81,7 +74,6 @@ export function useStorage({ onAllUploadSuccess }: Props) {
         });
         return;
       }
-
       if (!file?.file) {
         setState((prevState) => {
           const newErrors = [...prevState.uploadErrors];
@@ -91,16 +83,13 @@ export function useStorage({ onAllUploadSuccess }: Props) {
             uploadErrors: newErrors,
           };
         });
-
         return;
       }
-
       const storageRef = ref(
         storage,
         `user-data/${user?.uid}/${path}/${file.fileName}`,
       );
       const uploadTask = uploadBytesResumable(storageRef, file.file);
-
       uploadTask.on(
         'state_changed',
         (snapshot) => {
@@ -137,6 +126,8 @@ export function useStorage({ onAllUploadSuccess }: Props) {
               fileName: file.fileName,
               storagePath: uploadTask.snapshot.ref.fullPath,
             };
+            onOneUploadSuccess(index, newUploadedFiles[index]);
+
             return {
               ...prevState,
               uploadedFiles: newUploadedFiles,
@@ -148,11 +139,9 @@ export function useStorage({ onAllUploadSuccess }: Props) {
       );
     });
   };
-
   const removeFile = async (storagePath: string) => {
     const desertRef = ref(storage, storagePath);
     setState((prev) => ({ ...prev, removingFilePath: storagePath }));
-
     try {
       await deleteObject(desertRef);
       return true;
@@ -163,10 +152,8 @@ export function useStorage({ onAllUploadSuccess }: Props) {
     } finally {
       setState((prev) => ({ ...prev, removingFilePath: null }));
     }
-
     return false;
   };
-
   return {
     ...state,
     uploadFiles,
