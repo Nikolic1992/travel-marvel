@@ -2,6 +2,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 
 import { Box, Grid } from '@mui/material';
 
+import ErrorBoundary from '@config/routes/components/ErrorBoundary';
 import LoginBackground from '@features/auth/assets/login-background.png';
 import SignUpBackground from '@features/auth/assets/sign-up-background.png';
 
@@ -10,7 +11,6 @@ import Logo from '../logo/Logo';
 export default function AuthLayout() {
   const location = useLocation();
   const isLoginPage = location.pathname === '/login';
-
   return (
     <Grid
       container
@@ -63,7 +63,9 @@ export default function AuthLayout() {
           <Box mb={4}>
             <Logo />
           </Box>
-          <Outlet />
+          <ErrorBoundary>
+            <Outlet />
+          </ErrorBoundary>
         </Box>
       </Grid>
     </Grid>

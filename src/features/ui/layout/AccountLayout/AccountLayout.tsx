@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -15,6 +15,7 @@ import {
   styled,
 } from '@mui/material';
 
+import ErrorBoundary from '@config/routes/components/ErrorBoundary';
 import { theme } from '@config/styles';
 import AppIconButton from '@features/ui/AppIconButton';
 import { useBreakpoints } from '@hooks/useBreakpoints';
@@ -23,7 +24,6 @@ import AccountSidebar from './AccountSidebar';
 
 const DESKTOP_DRAWER_WIDTH = 288;
 const DESKTOP_MINIMIZED_DRAWER_WIDTH = 94;
-
 const openedMixin = (theme: Theme): CSSObject => ({
   width: DESKTOP_DRAWER_WIDTH,
   transition: theme.transitions.create('width', {
@@ -32,7 +32,6 @@ const openedMixin = (theme: Theme): CSSObject => ({
   }),
   overflowX: 'hidden',
 });
-
 const closedMixin = (theme: Theme): CSSObject => ({
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
@@ -41,7 +40,6 @@ const closedMixin = (theme: Theme): CSSObject => ({
   overflowX: 'hidden',
   width: DESKTOP_MINIMIZED_DRAWER_WIDTH,
 });
-
 const StyledDrawer = styled(Drawer, {
   shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
@@ -58,20 +56,21 @@ const StyledDrawer = styled(Drawer, {
     '& .MuiDrawer-paper': closedMixin(theme),
   }),
 }));
-
 const TOOLBAR_STYLES = { mt: 2, mb: 1 };
-
 export default function AccountLayout() {
   const { md, xl } = useBreakpoints();
   const [isOpen, setOpen] = useState(xl);
-
   const closeDrawer = () => {
     setOpen(false);
   };
-
   const handleDrawerToggle = () => {
     setOpen(!isOpen);
   };
+
+  // This call is needed to cause re-render when you change
+  // the url, so error boundary from another page also re-renders
+  // and doesn't show old error from previous page
+  useLocation();
 
   return (
     <Box
@@ -167,7 +166,9 @@ export default function AccountLayout() {
         }}
       >
         <Toolbar sx={{ display: { md: 'none' }, ...TOOLBAR_STYLES }} />
-        <Outlet />
+        <ErrorBoundary>
+          <Outlet />
+        </ErrorBoundary>
       </Box>
     </Box>
   );
