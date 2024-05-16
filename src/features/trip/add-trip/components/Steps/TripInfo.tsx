@@ -11,12 +11,12 @@ import {
 } from '@mui/material';
 
 import { Colors } from '@config/styles';
-import { TRIP_PREVIEW_IMAGES } from '@features/trip/data';
 import DateSelectInput from '@features/ui/form/DateSelectInput';
 import useDialog from '@hooks/useDialog';
 import { useAppDispatch, useAppSelector } from '@store/index';
 
 import PreviewImageDialog from '../../../components/PreviewImageDialog';
+import { usePreviewImageSrc } from '../../../hooks/usePreviewImageHook';
 import type { Trip } from '../../../types';
 import {
   nextStep,
@@ -33,7 +33,7 @@ interface FormInput {
   endDate: Trip['endDate'];
 }
 
-export default function TravelInfo() {
+export default function TripInfo() {
   const { isOpen, open, close } = useDialog();
   const {
     handleSubmit,
@@ -45,7 +45,6 @@ export default function TravelInfo() {
     errors,
     previewImageSrc,
   } = useTravelInfoForm({ closePreviewImageDialog: close });
-
   return (
     <Stack
       component="form"
@@ -114,8 +113,8 @@ export default function TravelInfo() {
                 inputRef={ref}
                 variant="standard"
                 margin="normal"
-                fullWidth
                 required
+                fullWidth
                 id="name"
                 label="Trip Name"
                 autoFocus
@@ -132,6 +131,7 @@ export default function TravelInfo() {
               control={control}
               requireErrorText="Please specify start date!"
               maxDate={formValues.endDate}
+              fullWidth
             />
             <DateSelectInput
               label="End date"
@@ -139,6 +139,7 @@ export default function TravelInfo() {
               control={control}
               requireErrorText="Please specify end date!"
               minDate={formValues.startDate}
+              fullWidth
             />
           </Stack>
         </Stack>
@@ -174,7 +175,6 @@ export default function TravelInfo() {
     </Stack>
   );
 }
-
 function useTravelInfoForm({
   closePreviewImageDialog,
 }: {
@@ -200,23 +200,18 @@ function useTravelInfoForm({
     },
   });
   const formValues = watch();
-  const previewImageSrc = formValues.previewImage?.templateImageId
-    ? TRIP_PREVIEW_IMAGES.find(
-        (image) => image.id === formValues.previewImage?.templateImageId,
-      )?.src
-    : null;
+
+  const previewImageSrc = usePreviewImageSrc(formValues.previewImage);
 
   const onPreviewImageSave = (previewImage: Trip['previewImage']) => {
     closePreviewImageDialog();
     setValue('previewImage', previewImage);
     trigger('previewImage');
   };
-
   const onSubmit: SubmitHandler<FormInput> = (data) => {
     dispatch(setTravelInformation(data));
     dispatch(nextStep());
   };
-
   return {
     handleSubmit,
     control,
