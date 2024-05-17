@@ -13,8 +13,18 @@ interface Props {
   LinkComponent?: React.ElementType;
   disabled?: boolean;
   href?: string;
+  isSmall?: boolean;
+  color?:
+    | 'error'
+    | 'inherit'
+    | 'primary'
+    | 'secondary'
+    | 'success'
+    | 'info'
+    | 'warning';
   sx?: SxProps<Theme>;
 }
+
 export default function AppButton({
   type = 'button',
   variant = 'contained',
@@ -26,6 +36,8 @@ export default function AppButton({
   endIcon,
   startIcon,
   disabled,
+  isSmall,
+  color,
   sx,
   onClick,
 }: Props) {
@@ -41,11 +53,12 @@ export default function AppButton({
       endIcon={endIcon}
       onClick={onClick}
       disabled={disabled}
+      color={color}
       sx={{
         borderRadius: 2,
         height: {
-          xs: variant === 'text' ? 42 : 48,
-          md: variant === 'text' ? 48 : 56,
+          xs: variant === 'text' || isSmall ? 42 : 48,
+          md: variant === 'text' || isSmall ? 48 : 56,
         },
         textTransform: 'none',
         width: fullWidth ? '100%' : 'fit-content',
