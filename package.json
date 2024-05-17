@@ -31,6 +31,7 @@
     "uuid": "9.0.1"
   },
   "devDependencies": {
+    "@types/lodash.debounce": "^4.0.9",
     "@types/node": "20.12.7",
     "@types/react": "18.2.66",
     "@types/react-dom": "18.2.22",

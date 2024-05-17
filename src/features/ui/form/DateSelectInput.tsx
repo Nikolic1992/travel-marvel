@@ -59,8 +59,8 @@ export default function DateSelectInput({
             ...sx,
           }}
           value={field.value ? dayjs(field.value) : null}
-          maxDate={maxDate ? dayjs(maxDate) : null}
-          minDate={minDate ? dayjs(minDate) : null}
+          maxDate={maxDate ? dayjs(maxDate) : undefined}
+          minDate={minDate ? dayjs(minDate) : undefined}
         />
       )}
     />
