@@ -3,7 +3,7 @@ import { type SxProps, type Theme } from '@mui/material';
 
 interface Props {
   isSmall?: boolean;
-  onClick: () => void;
+  onClick: (event?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   'aria-label': string;
   children: JSX.Element;
   variant?: 'outlined' | 'contained';
@@ -11,7 +11,6 @@ interface Props {
   isLoading?: boolean;
   sx?: SxProps<Theme>;
 }
-
 export default function AppIconButton(props: Props) {
   return (
     <LoadingButton

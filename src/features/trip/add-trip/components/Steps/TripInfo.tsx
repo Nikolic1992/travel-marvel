@@ -21,6 +21,7 @@ import type { Trip } from '../../../types';
 import {
   nextStep,
   selectWizardTrip,
+  setPreviewImage,
   setTravelInformation,
 } from '../../store/tripWizardSlice';
 import Pagination from '../Navigation/Pagination';
@@ -32,7 +33,6 @@ interface FormInput {
   startDate: Trip['startDate'];
   endDate: Trip['endDate'];
 }
-
 export default function TripInfo() {
   const { isOpen, open, close } = useDialog();
   const {
@@ -44,7 +44,9 @@ export default function TripInfo() {
     onPreviewImageSave,
     errors,
     previewImageSrc,
+    onPreviewImageChange,
   } = useTravelInfoForm({ closePreviewImageDialog: close });
+
   return (
     <Stack
       component="form"
@@ -78,6 +80,7 @@ export default function TripInfo() {
                   height: '100%',
                   borderRadius: 4,
                   objectFit: 'cover',
+                  aspectRatio: '1/1',
                 }}
                 src={previewImageSrc}
                 alt="Trip preview"
@@ -168,9 +171,13 @@ export default function TripInfo() {
       />
       <Pagination />
       <PreviewImageDialog
+        key={previewImageSrc}
         isOpen={isOpen}
         onClose={close}
         onSave={onPreviewImageSave}
+        defaultPreviewImage={formValues.previewImage}
+        defaultPreviewImageSrc={previewImageSrc}
+        onChange={onPreviewImageChange}
       />
     </Stack>
   );
@@ -200,14 +207,20 @@ function useTravelInfoForm({
     },
   });
   const formValues = watch();
-
   const previewImageSrc = usePreviewImageSrc(formValues.previewImage);
 
   const onPreviewImageSave = (previewImage: Trip['previewImage']) => {
     closePreviewImageDialog();
+    dispatch(setPreviewImage(previewImage));
     setValue('previewImage', previewImage);
     trigger('previewImage');
   };
+
+  const onPreviewImageChange = (previewImage: Trip['previewImage']) => {
+    dispatch(setPreviewImage(previewImage));
+    setValue('previewImage', previewImage);
+  };
+
   const onSubmit: SubmitHandler<FormInput> = (data) => {
     dispatch(setTravelInformation(data));
     dispatch(nextStep());
@@ -221,5 +234,6 @@ function useTravelInfoForm({
     errors,
     previewImageSrc,
     onPreviewImageSave,
+    onPreviewImageChange,
   };
 }
