@@ -129,7 +129,7 @@ export default function SignUpForm() {
         variant="contained"
         sx={{ mb: 2 }}
       >
-        Sing up
+        Sign up
       </AppButton>
       <Stack
         justifyContent="center"
