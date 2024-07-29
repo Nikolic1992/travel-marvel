@@ -94,7 +94,7 @@ export default function LoginForm() {
         <Typography color="text.secondary">
           Dont have an account yet?
         </Typography>
-        <Link href={AppRoutes.singUp} variant="body2">
+        <Link href={AppRoutes.signUp} variant="body2">
           Sign Up
         </Link>
       </Stack>
