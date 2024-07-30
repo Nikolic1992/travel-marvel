@@ -16,7 +16,17 @@ interface Props {
   loading?: boolean;
   sx?: SxProps<Theme>;
   LinkComponent?: React.ElementType;
+  disabled?: boolean;
   href?: string;
+  isSmall?: boolean;
+  color?:
+    | 'error'
+    | 'inherit'
+    | 'primary'
+    | 'secondary'
+    | 'success'
+    | 'info'
+    | 'warning';
   endIcon?: React.ReactNode;
   startIcon?: React.ReactNode;
   onClick?: () => void;
@@ -31,6 +41,8 @@ export default function AppButton({
   children,
   sx,
   loading,
+  isSmall,
+  color,
   LinkComponent,
   href,
   endIcon,
@@ -48,13 +60,14 @@ export default function AppButton({
       type={type}
       variant={variant}
       endIcon={endIcon}
+      color={color}
       startIcon={startIcon}
       onClick={onClick}
       sx={{
         borderRadius: 2,
         height: {
-          xs: variant === 'text' ? 42 : 48,
-          md: variant === 'text' ? 48 : 56,
+          xs: variant === 'text' || isSmall ? 42 : 48,
+          md: variant === 'text' || isSmall ? 48 : 56,
         },
         width: fullWidth ? '100%' : 'fit-content',
         textTransform: 'none',
