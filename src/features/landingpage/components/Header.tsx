@@ -39,7 +39,6 @@ function Header() {
           justifyContent: { xs: 'flex-end', md: 'space-between' },
           alignItems: 'center',
           width: '12.125rem',
-
           gap: 2.5,
         }}
       >

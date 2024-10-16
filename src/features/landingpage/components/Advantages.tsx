@@ -41,7 +41,7 @@ function Advantages() {
           gap: { xs: 3, md: 10.5 },
           justifyContent: 'space-between',
           alignItems: 'flex-start',
-          mt: '4rem',
+          mt: { xs: 0, md: '4rem' },
         }}
         textAlign="center"
       >

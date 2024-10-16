@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Divider, Stack, Typography } from '@mui/material';
 
 import { APP_NAME } from '@config/constants';
 import { Colors } from '@config/styles';
@@ -35,6 +35,7 @@ export default function Features() {
       sx={{
         mt: { xs: '4.25rem', md: '4.75rem' },
         mx: { xs: '1rem', md: '6.25rem' },
+        mb: { xs: '3rem', md: '10.063rem' },
       }}
       alignItems="center"
     >
@@ -63,10 +64,9 @@ export default function Features() {
           flexDirection: { xs: 'column', md: 'row' },
           justifyContent: { md: 'space-between' },
           alignItems: { xs: 'center', md: 'center' },
-          pb: { xs: '2rem', md: '4.5rem' },
           width: '100%',
-          borderBottom: `1px solid ${Colors.lightGrey}`,
           mt: { xs: '2rem', md: '4rem' },
+          mb: { xs: '2rem', md: '4.5rem' },
         }}
       >
         <Box
@@ -120,16 +120,23 @@ export default function Features() {
           <PlanYourTripButton fullWidth={!md} sx={{ minWidth: '16.25rem' }} />
         </Box>
       </Stack>
-
+      <Divider
+        sx={{
+          borderColor: Colors.lightGrey,
+          borderWidth: '1px',
+          width: '100%',
+          maxWidth: { xs: '100%', md: 'auto' },
+          maxHeight: { xs: '106px', md: 'auto' },
+        }}
+      />
       <Stack
         flex={1}
         sx={{
           flexDirection: { xs: 'column', md: 'row' },
           justifyContent: { md: 'space-between' },
           alignItems: { xs: 'center', md: 'center' },
-          pb: { xs: '2rem', md: '4.5rem' },
           width: '100%',
-          mt: { xs: '2rem', md: '4rem' },
+          mt: { xs: '2rem', md: '4.5rem' },
         }}
       >
         <Box sx={{ maxWidth: { xs: '100%', md: '650px' } }}>
@@ -179,7 +186,6 @@ export default function Features() {
             mr: 0,
             ml: { xs: 0, md: '1.5rem' },
             width: '100%',
-            mb: { xs: '1.5rem', md: 0 },
             minWidth: { xs: '100%', md: '40%' },
           }}
         />

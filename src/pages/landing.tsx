@@ -33,23 +33,31 @@ const Section = ({ children }: SectionProps) => {
 
 export default function LandingPage() {
   return (
-    <>
-      <Header />
-      <Section>
-        <Hero />
-      </Section>
-      <Section>
-        <Features />
-      </Section>
-      <Section>
-        <Advantages />
-      </Section>
+    <Box sx={{ backgroundColor: (theme) => theme.palette.grey[100] }}>
+      <Box
+        component={motion.div}
+        sx={{
+          maxWidth: '1920px',
+          mx: 'auto',
+        }}
+      >
+        <Header />
+        <Section>
+          <Hero />
+        </Section>
+        <Section>
+          <Features />
+        </Section>
+        <Section>
+          <Advantages />
+        </Section>
+      </Box>
       <Section>
         <PlanNextTrip />
       </Section>
       <Section>
         <Footer />
       </Section>
-    </>
+    </Box>
   );
 }
