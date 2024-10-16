@@ -1,6 +1,7 @@
 export const AppRoutes = {
-  home: '/',
-  singUp: '/sign-up',
+  landing: '',
+  home: '/home',
+  signUp: '/sign-up',
   login: '/login',
   dashboard: '/account/dashboard',
   trips: '/account/trips',

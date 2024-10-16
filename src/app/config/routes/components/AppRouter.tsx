@@ -7,6 +7,7 @@ import DashboardPage from '@pages/account/dashboard';
 import TripDetailsPage from '@pages/account/trips/trip-details';
 import TripsPage from '@pages/account/trips/trips';
 import HomePage from '@pages/home';
+import LandingPage from '@pages/landing';
 import LoginPage from '@pages/login';
 import NotFoundPage from '@pages/not-found';
 import SignUpPage from '@pages/sign-up';
@@ -18,9 +19,10 @@ export default function AppRouter() {
   return (
     <Routes>
       {/* Public Pages */}
+      <Route path={AppRoutes.landing} element={<LandingPage />} />
       <Route path={AppRoutes.home} element={<HomePage />} />
       <Route element={<AuthLayout />}>
-        <Route path={AppRoutes.singUp} element={<SignUpPage />} />
+        <Route path={AppRoutes.signUp} element={<SignUpPage />} />
         <Route path={AppRoutes.login} element={<LoginPage />} />
       </Route>
       {/* Account Pages */}

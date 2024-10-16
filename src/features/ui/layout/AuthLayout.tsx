@@ -61,7 +61,7 @@ export default function AuthLayout() {
           }}
         >
           <Box mb={4}>
-            <Logo />
+            <Logo sx={{ alignItems: 'center', justifyContent: 'center' }} />
           </Box>
           <ErrorBoundary>
             <Outlet />

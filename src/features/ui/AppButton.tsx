@@ -1,15 +1,20 @@
-import LoadingButton from '@mui/lab/LoadingButton';
-import { type SxProps, type Theme, Typography } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import {
+  type SxProps,
+  type Theme,
+  Typography,
+  TypographyProps,
+} from '@mui/material';
+
+import { theme } from '@config/styles';
 
 interface Props {
   type?: 'button' | 'submit' | 'reset';
   variant?: 'text' | 'contained' | 'outlined';
   fullWidth?: boolean;
-  loading?: boolean;
-  startIcon?: React.ReactNode;
-  endIcon?: React.ReactNode;
   children: React.ReactNode;
-  onClick?: () => void;
+  loading?: boolean;
+  sx?: SxProps<Theme>;
   LinkComponent?: React.ElementType;
   disabled?: boolean;
   href?: string;
@@ -22,50 +27,65 @@ interface Props {
     | 'success'
     | 'info'
     | 'warning';
-  sx?: SxProps<Theme>;
+  endIcon?: React.ReactNode;
+  startIcon?: React.ReactNode;
+  onClick?: () => void;
+  typography?: TypographyProps['variant'];
+  isLanding?: boolean;
 }
 
 export default function AppButton({
   type = 'button',
   variant = 'contained',
   fullWidth,
-  loading,
-  LinkComponent,
-  href,
   children,
-  endIcon,
-  startIcon,
-  disabled,
+  sx,
+  loading,
   isSmall,
   color,
-  sx,
+  LinkComponent,
+  href,
+  endIcon,
+  startIcon,
+  typography,
   onClick,
+  isLanding,
 }: Props) {
   return (
     <LoadingButton
-      loading={loading}
       LinkComponent={LinkComponent}
       href={href}
+      loading={loading}
       fullWidth={fullWidth}
       type={type}
       variant={variant}
-      startIcon={startIcon}
       endIcon={endIcon}
-      onClick={onClick}
-      disabled={disabled}
       color={color}
+      startIcon={startIcon}
+      onClick={onClick}
       sx={{
         borderRadius: 2,
         height: {
           xs: variant === 'text' || isSmall ? 42 : 48,
           md: variant === 'text' || isSmall ? 48 : 56,
         },
-        textTransform: 'none',
         width: fullWidth ? '100%' : 'fit-content',
+        textTransform: 'none',
         ...sx,
       }}
     >
-      <Typography component="span" variant="body2">
+      <Typography
+        component="span"
+        variant={typography || 'body2'}
+        sx={{
+          ...(isLanding && {
+            [theme.breakpoints.down('md')]: {
+              fontSize: '1.125rem',
+              lineHeight: '1.688rem',
+            },
+          }),
+        }}
+      >
         {children}
       </Typography>
     </LoadingButton>

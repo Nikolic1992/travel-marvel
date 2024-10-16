@@ -57,7 +57,10 @@ export default function AccountSidebar({ isMinimized, onClose }: Props) {
     >
       <Box>
         <Box mb={6}>
-          <Logo isMinimized={isMinimized} />
+          <Logo
+            isMinimized={isMinimized}
+            sx={{ alignItems: 'center', justifyContent: 'center' }}
+          />
         </Box>
         <Stack
           direction="row"
