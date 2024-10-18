@@ -20,14 +20,12 @@ import Pagination from '../Navigation/Pagination';
 interface FormInput {
   expenses: Trip['expenses'];
 }
-
 export default function Expenses() {
   const { open, close, isOpen } = useDialog();
   const { expenses, onSubmit, handleSubmit, addExpense, removeExpense } =
     useExpensesForm({
       closeExpenseDialog: close,
     });
-
   return (
     <Stack
       component="form"
@@ -46,13 +44,16 @@ export default function Expenses() {
       </AppButton>
       <ExpenseDialog onSave={addExpense} isOpen={isOpen} onClose={close} />
       {expenses.length > 0 && (
-        <ExpensesTable expenses={expenses} onDelete={removeExpense} />
+        <ExpensesTable
+          expenses={expenses}
+          onDelete={removeExpense}
+          autoScrollOnChange
+        />
       )}
       <Pagination />
     </Stack>
   );
 }
-
 function useExpensesForm({
   closeExpenseDialog,
 }: {
@@ -70,21 +71,17 @@ function useExpensesForm({
     control,
     name: 'expenses',
   });
-
   const addExpense = (expense: Expense) => {
     append(expense);
     closeExpenseDialog();
   };
-
   const removeExpense = (expenseId: string) => {
     remove(expenses.findIndex((expense) => expense.id === expenseId));
   };
-
   const onSubmit: SubmitHandler<FormInput> = (data) => {
     dispatch(setExpenses(data.expenses));
     dispatch(nextStep());
   };
-
   return {
     onSubmit,
     expenses,
