@@ -28,7 +28,6 @@ interface FormInput {
   locationFrom: Trip['locationFrom'];
   destinations: Trip['destinations'];
 }
-
 export default function Destinations() {
   const {
     destinations,
@@ -38,7 +37,6 @@ export default function Destinations() {
     control,
     onSubmit,
   } = useDestinationsForm();
-
   return (
     <Stack
       component="form"
@@ -55,6 +53,9 @@ export default function Destinations() {
           render={({ field: { ref, ...field }, fieldState }) => (
             <TextField
               autoFocus
+              inputProps={{
+                maxLength: 25,
+              }}
               inputRef={ref}
               variant="standard"
               margin="normal"
@@ -81,6 +82,9 @@ export default function Destinations() {
               rules={{ required: 'Please specify the destination!' }}
               render={({ field: { ref, ...field }, fieldState }) => (
                 <TextField
+                  inputProps={{
+                    maxLength: 25,
+                  }}
                   inputRef={ref}
                   variant="standard"
                   margin="normal"
@@ -118,7 +122,6 @@ export default function Destinations() {
     </Stack>
   );
 }
-
 function useDestinationsForm() {
   const dispatch = useAppDispatch();
   const trip = useAppSelector(selectWizardTrip);
@@ -136,21 +139,17 @@ function useDestinationsForm() {
     control,
     name: 'destinations',
   });
-
   const addDestination = () => {
     append({ id: uuidv4(), name: '' });
   };
-
   const removeDestination = (index: number) => {
     remove(index);
   };
-
   const onSubmit: SubmitHandler<FormInput> = (data) => {
     dispatch(setLocationFrom(data.locationFrom));
     dispatch(setDestinations(data.destinations));
     dispatch(nextStep());
   };
-
   return {
     handleSubmit,
     control,

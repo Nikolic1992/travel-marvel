@@ -9,4 +9,5 @@ export const Colors = {
   shadowGrey: '#B8B6B8',
   white: '#FFFFFF',
   black: '#000000',
+  darkBlue: 'rgba(84,134,166,0.5)',
 };
