@@ -129,7 +129,6 @@ export default function AppDialog({
               onClick={onPrimaryButtonClick}
               loading={isLoading}
             >
-              {secondaryButtonText}
               {primaryButtonText}
             </AppButton>
           )}
