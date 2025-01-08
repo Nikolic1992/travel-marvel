@@ -9,14 +9,13 @@ import { Colors } from '@config/styles';
 import PlacesForm from '@features/trip/components/PlacesForm';
 import DateSelectInput from '@features/ui/form/DateSelectInput';
 
-import type { Trip } from '../../types';
+import type { Expense, Trip } from '../../types';
 import ContentCard from './ContentCard';
 
 interface Props {
   trip: Trip;
   onUpdate: (data: Partial<Trip>) => void;
 }
-
 interface FormInput {
   name: Trip['name'];
   description: Trip['description'];
@@ -25,12 +24,11 @@ interface FormInput {
 }
 
 export default function TripInfoAndPlaces(props: Props) {
-  const totalBudget = 360;
+  const totalBudget = getTripTotalBudget(props.trip.expenses);
   const { control, formValues } = useTravelInfoForm(props);
 
   const onPlacesUpdate = (newPlaces: Trip['places']) =>
     props.onUpdate({ places: newPlaces });
-
   return (
     <Stack gap={3}>
       <ContentCard title="Trip Details">
@@ -120,7 +118,6 @@ export default function TripInfoAndPlaces(props: Props) {
     </Stack>
   );
 }
-
 function useTravelInfoForm({ trip, onUpdate }: Props) {
   const { control, watch } = useForm<FormInput>({
     mode: 'onChange',
@@ -132,15 +129,12 @@ function useTravelInfoForm({ trip, onUpdate }: Props) {
     },
   });
   const formValues = watch();
-
   useWatchChange(watch, onUpdate);
-
   return {
     control,
     formValues,
   };
 }
-
 function useWatchChange(
   watch: UseFormWatch<FormInput>,
   onUpdate: (data: Partial<Trip>) => void,
@@ -152,14 +146,16 @@ function useWatchChange(
     }, 500),
     [],
   );
-
   useEffect(() => {
     const formUpdateSubscription = watch((newValues) => {
       if (newValues.name && newValues.startDate && newValues.endDate) {
         onUpdateDebounced(newValues);
       }
     });
-
     return () => formUpdateSubscription.unsubscribe();
   }, [onUpdateDebounced, watch]);
+}
+
+function getTripTotalBudget(expenses: Expense[]) {
+  return expenses.reduce((total, expense) => total + expense.amount, 0);
 }

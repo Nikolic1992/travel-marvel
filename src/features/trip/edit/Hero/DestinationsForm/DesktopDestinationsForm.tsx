@@ -22,7 +22,6 @@ interface Props {
   removeDestination: (index: number) => void;
   addDestination: () => void;
 }
-
 export default function DesktopDestinationsForm({
   control,
   destinations,
@@ -62,7 +61,7 @@ export default function DesktopDestinationsForm({
                 error={Boolean(fieldState.error)}
                 sx={{
                   color: 'white',
-                  width: `${field.value.length}ch`,
+                  width: `${field.value.length + 1}ch`,
                   maxWidth: 150,
                   minWidth: 60,
                   textDecoration: field.value.length ? 'underline' : 'none',
@@ -116,7 +115,7 @@ export default function DesktopDestinationsForm({
                   id={`${destination}.${index}`}
                   error={Boolean(fieldState.error)}
                   sx={{
-                    width: `${field.value.length}ch`,
+                    width: `${field.value.length + 1}ch`,
                     color: 'white',
                     maxWidth: 150,
                     minWidth: 30,
