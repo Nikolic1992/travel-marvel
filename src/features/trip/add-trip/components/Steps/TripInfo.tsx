@@ -36,6 +36,7 @@ interface FormInput {
 export default function TripInfo() {
   const { isOpen, open, close } = useDialog();
   const {
+    tripId,
     handleSubmit,
     control,
     onSubmit,
@@ -46,7 +47,6 @@ export default function TripInfo() {
     previewImageSrc,
     onPreviewImageChange,
   } = useTravelInfoForm({ closePreviewImageDialog: close });
-
   return (
     <Stack
       component="form"
@@ -172,6 +172,7 @@ export default function TripInfo() {
       <Pagination />
       <PreviewImageDialog
         key={previewImageSrc}
+        tripId={tripId}
         isOpen={isOpen}
         onClose={close}
         onSave={onPreviewImageSave}
@@ -208,19 +209,16 @@ function useTravelInfoForm({
   });
   const formValues = watch();
   const previewImageSrc = usePreviewImageSrc(formValues.previewImage);
-
   const onPreviewImageSave = (previewImage: Trip['previewImage']) => {
     closePreviewImageDialog();
     dispatch(setPreviewImage(previewImage));
     setValue('previewImage', previewImage);
     trigger('previewImage');
   };
-
   const onPreviewImageChange = (previewImage: Trip['previewImage']) => {
     dispatch(setPreviewImage(previewImage));
     setValue('previewImage', previewImage);
   };
-
   const onSubmit: SubmitHandler<FormInput> = (data) => {
     dispatch(setTravelInformation(data));
     dispatch(nextStep());
@@ -235,5 +233,6 @@ function useTravelInfoForm({
     previewImageSrc,
     onPreviewImageSave,
     onPreviewImageChange,
+    tripId: trip.id,
   };
 }

@@ -21,6 +21,7 @@ interface Props {
   onSave: (previewImage: Trip['previewImage']) => void;
   // Will be called in case of uploaded file removal
   onChange?: (previewImage: Trip['previewImage']) => void;
+  tripId: string;
 }
 
 export default function PreviewImageDialog({
@@ -30,10 +31,10 @@ export default function PreviewImageDialog({
   defaultPreviewImage,
   defaultPreviewImageSrc,
   onChange,
+  tripId,
 }: Props) {
   const { md } = useBreakpoints();
   const { showErrorMessage } = useToast();
-
   const {
     uploadFiles,
     uploadProgresses,
@@ -49,39 +50,33 @@ export default function PreviewImageDialog({
       }
     },
   });
-
   const customImageInputRef = useRef<HTMLInputElement | null>(null);
-
   const [customImageFile, setCustomImageFile] = useState<File | null>();
   const [customPreviewImageSrc, setCustomPreviewImageSrc] = useState<
     string | null | undefined
   >(defaultPreviewImageSrc);
   const [selectedPreviewImage, setSelectedPreviewImage] =
     useState<Trip['previewImage']>(defaultPreviewImage);
-
   const onTemplateImageClick = (imageId: string) => {
     if (!isLoading && !removingFilePath) {
       setSelectedPreviewImage({ templateImageId: imageId });
     }
   };
-
   const onCancel = () => {
     setSelectedPreviewImage(defaultPreviewImage);
     onClose();
   };
-
   const onSaveClick = async () => {
     if (!selectedPreviewImage) {
       showErrorMessage('Please select a preview image!');
       return;
     }
-
     if (
       selectedPreviewImage.url &&
       !selectedPreviewImage.storagePath &&
       customImageFile
     ) {
-      uploadFiles('preview-images', [
+      uploadFiles(`preview-images/${tripId}`, [
         { fileName: customImageFile.name, file: customImageFile },
       ]);
     } else if (
@@ -94,18 +89,15 @@ export default function PreviewImageDialog({
       onSave(selectedPreviewImage);
     }
   };
-
   // Custom Image Modifications
   const onCustomImageUploadClick = () => {
     customImageInputRef.current?.click();
   };
-
   const onCustomImageRemove = async () => {
     const newSelectedPreviewImage = {
       templateImageId: TRIP_PREVIEW_IMAGES[TRIP_PREVIEW_IMAGES.length - 1].id,
     };
     setSelectedPreviewImage(newSelectedPreviewImage);
-
     if (defaultPreviewImage?.storagePath) {
       await removeFile(defaultPreviewImage?.storagePath);
       onChange?.(newSelectedPreviewImage);
@@ -114,7 +106,6 @@ export default function PreviewImageDialog({
       setCustomImageFile(null);
     }
   };
-
   const onCustomImageFileInputChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -126,7 +117,6 @@ export default function PreviewImageDialog({
       });
     }
   };
-
   const selectCustomPreviewImage = () => {
     if (customImageFile) {
       setSelectedPreviewImage({
@@ -136,7 +126,6 @@ export default function PreviewImageDialog({
       setSelectedPreviewImage(defaultPreviewImage);
     }
   };
-
   // File upload errors displaying
   useEffect(() => {
     if (uploadErrors[0]) {
@@ -144,7 +133,6 @@ export default function PreviewImageDialog({
       resetUpload();
     }
   }, [resetUpload, showErrorMessage, uploadErrors]);
-
   return (
     <AppDialog
       title="Select your preview image"

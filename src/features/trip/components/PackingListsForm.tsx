@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import debounce from 'lodash.debounce';
+import { useCallback, useEffect, useState } from 'react';
 import {
   Controller,
   type SubmitHandler,
+  type UseFormWatch,
   useFieldArray,
   useForm,
 } from 'react-hook-form';
@@ -26,14 +28,14 @@ import type { Trip } from '../types';
 
 interface Props {
   defaultPackingLists: Trip['packingLists'];
-  onSubmit: SubmitHandler<FormInput>;
-  SubmitComponent: React.ReactNode;
+  onChange?: (newPackingLists: Trip['packingLists']) => void;
+  onSubmit?: SubmitHandler<FormInput>;
+  SubmitComponent?: React.ReactNode;
 }
 
 interface FormInput {
   packingLists: Trip['packingLists'];
 }
-
 export default function PackingListsForm(props: Props) {
   const {
     packingLists,
@@ -46,11 +48,10 @@ export default function PackingListsForm(props: Props) {
     onRemovePackingListClick,
     onNewListInputKeyDown,
   } = usePackingListsForm(props);
-
   return (
     <Stack
       component="form"
-      onSubmit={handleSubmit(props.onSubmit)}
+      onSubmit={props.onSubmit ? handleSubmit(props.onSubmit) : undefined}
       noValidate
       sx={{ width: '100%' }}
       gap={3}
@@ -155,7 +156,7 @@ export default function PackingListsForm(props: Props) {
   );
 }
 
-function usePackingListsForm({ defaultPackingLists }: Props) {
+function usePackingListsForm({ defaultPackingLists, onChange }: Props) {
   const [newListName, setNewListName] = useState('');
   const { watch, handleSubmit, control, setFocus } = useForm<FormInput>({
     defaultValues: {
@@ -167,7 +168,6 @@ function usePackingListsForm({ defaultPackingLists }: Props) {
     control,
     name: 'packingLists',
   });
-
   const onAddPackingListClick = () => {
     if (!newListName) {
       return;
@@ -179,11 +179,9 @@ function usePackingListsForm({ defaultPackingLists }: Props) {
     });
     setNewListName('');
   };
-
   const onRemovePackingListClick = (packingListIndex: number) => {
     remove(packingListIndex);
   };
-
   const onNewListInputKeyDown = (
     event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -192,7 +190,6 @@ function usePackingListsForm({ defaultPackingLists }: Props) {
       onAddPackingListClick();
     }
   };
-
   const onInputKeyDown = (
     event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
     packingListIndex: number,
@@ -242,6 +239,8 @@ function usePackingListsForm({ defaultPackingLists }: Props) {
     }
   };
 
+  useWatchChange(watch, onChange);
+
   return {
     handleSubmit,
     control,
@@ -253,4 +252,25 @@ function usePackingListsForm({ defaultPackingLists }: Props) {
     onRemovePackingListClick,
     onNewListInputKeyDown,
   };
+}
+
+function useWatchChange(
+  watch: UseFormWatch<FormInput>,
+  onChange?: (newPackingLists: Trip['packingLists']) => void,
+) {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const onUpdateDebounced = useCallback(
+    debounce((data: Trip['packingLists']) => {
+      onChange?.(data);
+    }, 500),
+    [],
+  );
+
+  useEffect(() => {
+    const formUpdateSubscription = watch((newValues) => {
+      onUpdateDebounced(newValues.packingLists as Trip['packingLists']);
+    });
+
+    return () => formUpdateSubscription.unsubscribe();
+  }, [onUpdateDebounced, watch]);
 }
