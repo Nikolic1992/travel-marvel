@@ -102,8 +102,8 @@ export default function FilesForm(props: Props) {
                 {isPhotosForm && (
                   <Box
                     sx={{
-                      width: { xs: 171, md: 261 },
-                      height: { xs: 171, md: 250 },
+                      width: { xs: 170, md: 261 },
+                      height: { xs: 170, md: 250 },
                     }}
                   >
                     <PhotoCard
