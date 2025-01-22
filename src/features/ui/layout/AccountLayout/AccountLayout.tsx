@@ -15,6 +15,7 @@ import {
   styled,
 } from '@mui/material';
 
+import { AppRoutes } from '@config/routes';
 import ErrorBoundary from '@config/routes/components/ErrorBoundary';
 import { theme } from '@config/styles';
 import AppIconButton from '@features/ui/AppIconButton';
@@ -60,6 +61,7 @@ const TOOLBAR_STYLES = { mt: 2, mb: 1 };
 
 export default function AccountLayout() {
   const location = useLocation();
+  const isPrimaryNavBackgroundColor = location.pathname === AppRoutes.dashboard;
   const { md, xl } = useBreakpoints();
   const [isOpen, setOpen] = useState(xl);
 
@@ -69,11 +71,9 @@ export default function AccountLayout() {
   const handleDrawerToggle = () => {
     setOpen(!isOpen);
   };
-
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
-
   return (
     <Box
       sx={{
@@ -119,7 +119,13 @@ export default function AccountLayout() {
         <>
           <AppBar
             position="fixed"
-            sx={{ boxShadow: 'none', backgroundColor: 'grey.100' }}
+            sx={{
+              boxShadow: 'none',
+              backgroundColor: {
+                xs: isPrimaryNavBackgroundColor ? 'primary.main' : 'grey.100',
+                md: 'grey.100',
+              },
+            }}
           >
             <Toolbar sx={TOOLBAR_STYLES}>
               <IconButton
@@ -128,7 +134,17 @@ export default function AccountLayout() {
                 edge="start"
                 onClick={handleDrawerToggle}
               >
-                <MenuIcon sx={{ color: 'primary.main', fontSize: 40 }} />
+                <MenuIcon
+                  sx={{
+                    color: {
+                      xs: isPrimaryNavBackgroundColor
+                        ? 'white'
+                        : 'primary.main',
+                      md: 'primary.main',
+                    },
+                    fontSize: 40,
+                  }}
+                />
               </IconButton>
             </Toolbar>
           </AppBar>
