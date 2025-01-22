@@ -10,4 +10,7 @@ export const Colors = {
   white: '#FFFFFF',
   black: '#000000',
   darkBlue: 'rgba(84,134,166,0.5)',
+  lightBlue: 'rgba(126,169,195,0.17)',
+  lightOrange: '#FBE7C5',
+  orange: '#ED6C02',
 };
