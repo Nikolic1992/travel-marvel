@@ -8,6 +8,7 @@ import AddTripPage from '@pages/account/add-trip';
 import DashboardPage from '@pages/account/dashboard';
 import TripDetailsPage from '@pages/account/trips/trip-details';
 import TripsPage from '@pages/account/trips/trips';
+import LandingPage from '@pages/landing';
 import NotFoundPage from '@pages/not-found';
 
 import { AppRoutes } from '../AppRoutes';
@@ -22,6 +23,7 @@ export default function AppRouter() {
     <Suspense fallback={<Loader />}>
       <Routes>
         {/* Public Pages */}
+        <Route path={AppRoutes.landing} element={<LandingPage />} />
         <Route path={AppRoutes.home} element={<HomePage />} />
         <Route element={<AuthLayout />}>
           <Route path={AppRoutes.signUp} element={<SignUpPage />} />
