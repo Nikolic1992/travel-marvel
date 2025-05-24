@@ -33,7 +33,7 @@ export default function Features() {
   return (
     <Stack
       sx={{
-        mt: { xs: '4.25rem', md: '4.75rem' },
+        mt: { xs: '4.25rem', md: '12rem' },
         mx: { xs: '1rem', md: '6.25rem' },
         mb: { xs: '3rem', md: '10.063rem' },
       }}
